@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Template to deploy EC2 instance, sg and load balancer
+Parameters:
+  EC2InstanceType:
+    Type: String
+    Default: t2.micro
+    Description: Enter EC2 Instance Type. Default is t2.micro.
+  RootVolumeSize:
+    Type: Number
+    Default: 40
+    Description: Specify the size for root volume. Default is 40
+  AMIId:
+    Type: String
+    Description: Enter AMI Id for the instance
+  DefaultVPCID:
+    Type: AWS::EC2::VPC::Id
+    Description: Enter your default VPC Id
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Enter in the key name for the instance
+Resources:
+  cfnLabInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+       Ref: AMIId
+      InstanceType: 
+        Ref: EC2InstanceType
+      KeyName:
+        Ref: KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 
+              Ref: RootVolumeSize
+      Tags: 
+        - Key: Env
+          Value: Testing
+        - Key: Name
+          Value: cfn-lab
+        - Key: NewTag
+          Value: Demo
+  cfnLabSecuritygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'cfn-lab security group'
+      VpcId:
+        Ref: DefaultVPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0

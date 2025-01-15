@@ -2,12 +2,11 @@
 
 This directory includes resources covered in this video.
 
-
-Resources to create and configure self-hosted cluster with (terraform)[tf-resources] and bash (script)[scripts/create_cluster.sh]. Then, deploy a blog (app)[manifests/app.yaml] with multiple services and expose them to the internet using an(Ingress)[manifests/ingress.yaml] and a load balancer.
+Resources to create and configure self-hosted cluster with [terraform](tf-resources) and bash [script](scripts/create_cluster.sh). Then, deploy a blog [app](manifests/app.yaml) with multiple services and expose them to the internet using an [Ingress](manifests/ingress.yaml) and a load balancer.
 
 Terraform creates the cluster in private subnets and also creates a bastion host for accessing the cluster.
 
-Load balancer is created using aws-load-balancer (contoller)[https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/]
+Load balancer is created using aws-load-balancer [contoller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/)
 
 ## Steps
 
@@ -17,13 +16,13 @@ Load balancer is created using aws-load-balancer (contoller)[https://kubernetes-
 3. (Optional) Route 53 Domain
 ### Create EC2 Instances & Other Components for the Cluster Using Terraform
 
-Resources: \
+Resources created: \
 __VPC__: 2 Private subnets, 2 Public subnets, 1 nat gw, 1 igw and 2 security groups(cluster and bastion node) \
 __IAM role__: Permissions required to create load balancer \
 __EC2 instances__: 1 master, 2 worker nodes (t2.medium), and 1 Bastian host(t2.micro)
 
 1. cd to [tf-resources](tf-resources).
-2. Most variables are defined[here](tf-resources/1-variable.tf). Adjust them if needed.
+2. Most variables are defined [here](tf-resources/1-variable.tf). Adjust them if needed.
 3. Amazon Linux image is the default AMI. Update the data resource in [here](tf-resources/4-ec2-instace.tf) for a different distro.
 4. Initialize the dir and run `terraform plan` to check for error and then `terraform apply` to create resources.
 5. Make note of IPs. Will need them to access nodes.
@@ -45,7 +44,7 @@ __NOTE__: Only the bastion host is accessible from the external network. Cluster
     sudo dnf install git tmux -y
     ```
 4. Connect to each instance via SSH from th bastion host. 
-5. (TIP) Install tmux, export IPs into variables and create multiple sessions in tmux to connect to all instance at once. \
+5. (Tip) Install tmux, export IPs into variables and create multiple sessions in tmux to connect to all instance at once. \
     `ssh -i demo-devops-avenue-ue2.pem ec2-user@<MASTER_IP>` \
     `ssh -i demo-devops-avenue-ue2.pem ec2-user@<WORKER1_IP>` \
     `ssh -i demo-devops-avenue-ue2.pem ec2-user@<WORKER2_IP>`
@@ -53,19 +52,21 @@ __NOTE__: Only the bastion host is accessible from the external network. Cluster
 ### Create Kubernetes Cluster
 Use a script to create a Kubernetes cluster with kubeadm.
 
-1. Download the [create_cluster](scripts/create_cluster.sh) on each node. \ Run `wget gi`
+1. Download the [create_cluster](scripts/create_cluster.sh) on each node. \  
+    `wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-aws-load-balancer/scripts/create_cluster.sh`
 2. Change permissions for the script. \ `chmod +x create_cluster.sh` \
 NOTE: This script prepares the nodes with kubeadm as the [docs](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/). The cluster is intialized with pod-network-cidr=192.168.0.0/16
 3. Run the script on each node. \`sudo ./create_cluster.sh`
-4. Select `yes` for control plane & `No` for worker nodes.
-NOTE: Make note of cluster join command.
+4. Select `yes` for control plane & `No` for worker nodes. \
+__NOTE: Make note of cluster join command.__
 5. Install the network CNI:
     ```
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
     ```
     NOTE: Download and update `custom-resources.yaml` with a different CIDR IF NEEDED.
-5. Join worker nodes to the cluster.\ Example: `kubeadm join 172.31.25.150:6443 --token 2i8vrs.wsshnhe5zf87rhhu --discovery-token-ca-cert-hash sha256:eacbaf01cc58203f3ddd69061db2ef8e64f450748aef5620ec04308eac44bd77`
+5. Join worker nodes to the cluster.\ 
+_Example_: `kubeadm join 172.31.25.150:6443 --token 2i8vrs.wsshnhe5zf87rhhu --discovery-token-ca-cert-hash sha256:eacbaf01cc58203f3ddd69061db2ef8e64f450748aef5620ec04308eac44bd77`
 
 Exit the nodes and return to the bastion host.
 
@@ -107,8 +108,9 @@ Exit the nodes and return to the bastion host.
 
 ### Create Deployment and Services for the Blog App.
 
-1. Download app [manifest](manifests/app.yaml) \ `wget ..`
-2. Apply the manifest - kubectl -f app.yaml
+1. Download app [manifest](manifests/app.yaml) \ 
+`wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-aws-load-balancer/manifests/app.yaml`
+2. Apply the manifest: `kubectl -f app.yaml` \
 NOTE: Update the URLs in the configmap with your domain.
 
 ### Set Up ACM certificate
@@ -122,17 +124,18 @@ Assumption: You have a domain.
 ### Create Ingress and load balancer
 
 1. Patch worker nodes with `Provider_ID`:
-    `kubectl patch node worker1 -p '{"spec":{"providerID":"aws:///<Region>/<WORKER_ID>"}}'` \
+    `kubectl patch node <worker_node_name> -p '{"spec":{"providerID":"aws:///<Region>/<WORKER_ID>"}}'` \
     _Example_: `kubectl patch node worker1 -p '{"spec":{"providerID":"aws:///us-east-2/i-012373091f38897a1"}}'`
 
-2. Download the Ingress manifest [here](manifests/ingress.yaml) \ `wget ..`
-3. Apply the Ingress manifest: \ `kubectl -f ingress.yaml`
+2. Download the Ingress manifest [here](manifests/ingress.yaml) \
+ `wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-aws-load-balancer/manifests/ingress.yaml`
+3. Apply the Ingress manifest: \ `kubectl -f ingress.yaml` \
     NOTE: If a domain isn't available. Remove the host and HTTPS from ingress manifest:\
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80} ~~, {"HTTPS": 443}~~]' \
     ~~host: testblog.gurlal.com~~ \
     Without a domain, ACM setup won’t be applicable, and app redirects won’t work. You can access the app using the load balancer’s DNS name.
 4. View Ingress logs:
-    `kubectl describe ingress blog-app-ingress`
+    `kubectl describe ingress blog-app-ingress` \
     `kubectl logs -n kube-system -l=app.kubernetes.io/instance=aws-load-balancer-controller`
 
 Wait for the load balancer to be created.

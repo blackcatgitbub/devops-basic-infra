@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: blog-app
-          image: devopsavenue/main-app:v2
+          image: devopsavenue/blog-app:v1
           imagePullPolicy: Always
           ports:
           - containerPort: 5001
@@ -30,13 +30,6 @@ spec:
                 configMapKeyRef:
                   name: app-urls
                   key: LOGOUT_URL
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m" 
 ---
 apiVersion: v1
 kind: Service
@@ -68,7 +61,7 @@ spec:
     spec:
       containers:
       - name: login-app
-        image: devopsavenue/login-app:v2
+        image: devopsavenue/loginapp:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 5002
@@ -78,13 +71,6 @@ spec:
               configMapKeyRef:
                 name: app-urls
                 key: BASE_URL
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m" 
 ---
 apiVersion: v1
 kind: Service

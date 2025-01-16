@@ -186,7 +186,8 @@ systemctl restart containerd
 
 #Install Kubernetes components based on OS
 echo "Installing kubeadm and kubelet"
-RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt | sed 's/\.0//')"
+RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+RELEASE="${RELEASE%.*}"
 
 case "$OS" in
     "ubuntu"|"debian")

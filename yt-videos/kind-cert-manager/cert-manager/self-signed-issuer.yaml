@@ -1,0 +1,6 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: da-selfsigned-issuer
+spec:
+  selfSigned: {}

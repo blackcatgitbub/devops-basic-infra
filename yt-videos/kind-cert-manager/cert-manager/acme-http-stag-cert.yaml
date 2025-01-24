@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: da-acme-http-stag-cert
+spec:
+  dnsNames:
+  - blog2.gurlal.com #hostname
+  secretName: da-acme-http-stag-sec
+  issuerRef:
+    name: da-acme-http-stag
+    kind: ClusterIssuer

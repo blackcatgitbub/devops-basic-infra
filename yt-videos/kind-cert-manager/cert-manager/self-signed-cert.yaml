@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: da-selfsigned-cert
+spec:
+  isCA: true
+  dnsNames:
+  - blog2.gurlal.com #hostname
+  secretName: da-ss-sec
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: da-selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  subject:
+    organizations:
+      - Devops-Avenue

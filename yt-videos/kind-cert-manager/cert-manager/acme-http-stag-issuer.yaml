@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: da-acme-http-stag
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    #server: https://acme-v02.api.letsencrypt.org/directory # production issuer
+    email: ggssidhu12@gmail.com #required to register account
+    privateKeySecretRef:
+      name: da-acme-htttp-stag-key
+    solvers:
+    - http01:
+        ingress:
+          ingressClassName: nginx  # Other options: class; name(ingress_resource); podtemplate(change or add to the labels and annotations of solver pods) + Gateway API

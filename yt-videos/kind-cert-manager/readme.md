@@ -39,12 +39,12 @@ Use a bash script to: 1) Install kind 2) kubectl 3)Create kind cluster and map h
   
 1. Download [setup_cluster](script/set_cluster.sh) script on your node.  
 ```
-https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/kind-cert-manager/script/set_cluster.sh
+wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/kind-cert-manager/script/set_cluster.sh
 ```
 3. Change permissions for the script and run it.  
 ```
 chmod +x set_cluster.sh
-sudo ./set_cluster.sh 
+./set_cluster.sh 
 ```
 
 ### Deploy Nginx Ingress controller and a Web App with Ingress
@@ -155,7 +155,7 @@ kubectl describe secrets da-ss-sec
 *Type: kubernetes.io/tls indicates it is a valid TLS secret.*
 Ingress controller logs:  
 ```
-kubectl logs -n ingress-nginx <controller_pod_name>
+kubectl logs -n ingress-nginx ingress-nginx-controller-<controller_pod_name>
 ```
 
 ### Let's Encrypt (ACME Server) signed certificate
@@ -172,7 +172,7 @@ kubectl create -f acme-http-stag-cert.yaml
 ```
 3. Status of the certificate:  
 ```
-kubectl describe certificates acme-http-stag-cert
+kubectl describe certificates da-acme-http-stag-cert
 ```
 4. Once cert issued. Edit the secret for ingress app and update its value to `da-acme-http-stag-sec`:  
 ```
@@ -192,13 +192,14 @@ kubectl describe clusterissuers da-acme-http-stag
 
 Check the secret
 ```
-kubectl get secrets`  &&  `kubectl describe secrets da-acme-http-stag-sec
+kubectl get secrets
+kubectl describe secrets da-acme-http-stag-sec
 ```
    ** Type: kubernetes.io/tls indicates it is a valid TLS secret. **
 
 Ingress controller logs:  
 ```
-kubectl logs -n ingress-nginx <controller_pod_name>
+kubectl logs -n ingress-nginx ingress-nginx-controller-<controller_pod_name>
 ```
 
 #### HTTP01 Challenge Solver - Prod (Validated)
@@ -214,7 +215,7 @@ kubectl create -f acme-http-prod-cert.yaml
 ```
 4. Status of the certificate:  
 ```
-kubectl describe certificates acme-http-prod-cert
+kubectl describe certificates da-acme-http-prod-cert
 ```
 ** Takes longer to issue this certificate **
 5. Once cert issued. Edit the secret for ingress app:  
@@ -242,6 +243,6 @@ kubectl describe secrets da-acme-http-prod-sec
 
 Ingress controller logs:  
 ```
-kubectl logs -n ingress-nginx <controller_pod_name>
+kubectl logs -n ingress-nginx ingress-nginx-controller-<controller_pod_name>
 ```
 

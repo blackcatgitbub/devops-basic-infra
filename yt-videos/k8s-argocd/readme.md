@@ -43,7 +43,7 @@ wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt
 3. Change permissions for the script and run it.  
 ```
 chmod +x set_cluster.sh
-sudo ./set_cluster.sh 
+./set_cluster.sh 
 ```
 
 ### Install Argo CD

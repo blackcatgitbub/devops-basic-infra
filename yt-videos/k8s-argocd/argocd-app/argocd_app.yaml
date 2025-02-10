@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/gurlal-1/example-apps.git
+    repoURL: git@github.com:gurlal-1/devops-avenue.git
     targetRevision: HEAD
     path: yt-videos/k8s-argocd/manifests
   destination:

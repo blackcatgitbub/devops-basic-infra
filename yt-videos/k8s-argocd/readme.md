@@ -34,11 +34,11 @@ docker ps
 ```
 
 ### Create kind cluster
-Use a bash script to: 1) Install kind 2) kubectl 3)Create kind cluster and map host ports with kind container
+Use a bash script to: 1) Install kind 2) kubectl 3) Create kind cluster and map host ports with kind container
   
 1. Download [setup_cluster](script/set_cluster.sh) script on your node.  
 ```
-link here
+wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-argocd/script/set_cluster.sh
 ```
 3. Change permissions for the script and run it.  
 ```
@@ -76,19 +76,19 @@ Click **User Info** --> Click **UPDATE PASSWORD**
 
 1. Click **Applications** , click **+ NEW APP**
 2. Enter in required fields:  
-`blog-app` Application  
-`default` Project Name  
-`Manual` SYNC POLICY  
-`CHECK` Auto-Create Namespace  
-`https://github.com/gurlal-1/devops-avenue.git` Repository URL  
-`HEAD` Revision  
-` ` Path  
-`https://kubernetes.default.svc` Cluster URL  
-`blog-app` Namespace  
+Application: `blog-app`
+Project Name: `default`  
+SYNC POLICY: `Manual`   
+Auto-Create Namespace: `CHECK` 
+Repository URL: `https://github.com/gurlal-1/devops-avenue.git` 
+Revision: `HEAD`  
+Path: `yt-videos/k8s-argocd/manifests` 
+Cluster URL: `https://kubernetes.default.svc`
+Namespace: `blog-app01` 
 Leave everything as it is.
-3. Click `CREATE`
-4. Click `SYNC` ,leave options as it is and click `SYNCRONIZE`
-5. Access the deployed app  
+4. Click `CREATE`
+5. Click `SYNC` ,leave options as it is and click `SYNCRONIZE`
+6. Access the deployed app  
 ```
 https://<instance_public_ip>:30011
 ```
@@ -98,7 +98,7 @@ https://<instance_public_ip>:30011
 1. Application spec are [here](argocd-app/argocd_app.yaml)
 2. Deploy the application CRD with kubectl
 ```
-kubectl apply -f ` `
+kubectl apply -f https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-argocd/argocd-app/argocd_app.yaml
 ```
 
 ### Additional application config

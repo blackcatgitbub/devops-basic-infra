@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/gurlal-1/example-apps.git
     targetRevision: HEAD
-    path: blog_app_np_svc
+    path: yt-videos/k8s-argocd/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: blog-app

@@ -74,17 +74,17 @@ Click **User Info** --> Click **UPDATE PASSWORD**
 
 ### Deploy a web app Via UI
 
-1. Click **Applications** , click **+ NEW APP**
+1. Click **Applications** , click **+ NEW APP**  
 2. Enter in required fields:  
-Application: `blog-app`
+Application: `blog-app`  
 Project Name: `default`  
-SYNC POLICY: `Manual`   
-Auto-Create Namespace: `CHECK` 
-Repository URL: `https://github.com/gurlal-1/devops-avenue.git` 
+SYNC POLICY: `Manual`  
+Auto-Create Namespace: `CHECK`  
+Repository URL: `https://github.com/gurlal-1/devops-avenue.git`  
 Revision: `HEAD`  
-Path: `yt-videos/k8s-argocd/manifests` 
-Cluster URL: `https://kubernetes.default.svc`
-Namespace: `blog-app01` 
+Path: `yt-videos/k8s-argocd/manifests`  
+Cluster URL: `https://kubernetes.default.svc`  
+Namespace: `blog-app01`  
 Leave everything as it is.
 4. Click `CREATE`
 5. Click `SYNC` ,leave options as it is and click `SYNCRONIZE`

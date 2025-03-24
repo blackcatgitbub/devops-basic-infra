@@ -38,7 +38,8 @@ __NOTE__: Only the bastion host is accessible from the external network. Cluster
 3. Connect to the bastain host via SSH.  
     _Example_: `ssh -i demo-devops-avenue-ue2.pem ec2-user@$BASTIAN_IP`  
     Install `tmux` and `git`:
-    ```
+    
+    ```bash
     sudo yum update && sudo yum upgrade
     sudo hostnamectl set-hostname "bastian-node"
     sudo dnf install git tmux -y
@@ -52,17 +53,27 @@ __NOTE__: Only the bastion host is accessible from the external network. Cluster
 ### Create Kubernetes Cluster
 Use a script to create a Kubernetes cluster with kubeadm.
 
-1. Download the [create_cluster](scripts/create_cluster.sh) on each node.  
-`wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-aws-load-balancer/scripts/create_cluster.sh`
+1. Download the [create_cluster](scripts/create_cluster.sh) on each node.
+
+```bash
+wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-aws-load-balancer/scripts/create_cluster.sh
+```
 2. Change permissions for the script.  
-`chmod +x create_cluster.sh`  
+
+```bash
+chmod +x create_cluster.sh
+```
 NOTE: This script prepares the nodes with kubeadm as the [docs](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/). The cluster is intialized with pod-network-cidr=192.168.0.0/16
 3. Run the script on each node.  
-`sudo ./create_cluster.sh`
+
+```bash
+sudo ./create_cluster.sh
+```
 4. Select `yes` for control plane & `No` for worker nodes.  
 __NOTE: Make note of cluster join command.__
 5. Install the network CNI:
-    ```
+    
+    ```bash
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
     watch kubectl get pods -n calico-system
@@ -71,16 +82,23 @@ __NOTE: Make note of cluster join command.__
 5. Join worker nodes to the cluster.  
 _Example_: `kubeadm join 172.31.25.150:6443 --token 2i8vrs.wsshnhe5zf87rhhu --discovery-token-ca-cert-hash sha256:eacbaf01cc58203f3ddd69061db2ef8e64f450748aef5620ec04308eac44bd77`
 6. Check nodes and calico status:  
-`kubectl get pods -n calico-system`  
-`kubectl logs -n calico-system -l=k8s-app=calico-node`  
-`kubect get nodes`  
+    ```
+    kubectl get pods -n calico-system
+    ```  
+    ```
+    kubectl logs -n calico-system -l=k8s-app=calico-node
+    ```  
+    ```
+    kubect get nodes
+    ```
 
 Exit the nodes and return to the bastion host.
 
 ### Configure kubectl on Bastian Host
 
 1. Add the Kubernetes repo and install `kubectl`:
-    ```
+    
+    ```bash
     RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
     RELEASE="${RELEASE%.*}"
     sudo bash -c "cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -94,7 +112,8 @@ Exit the nodes and return to the bastion host.
     sudo dnf install kubectl -y
     ```
 2. Create the config dir and move the kubernetes config from the master node:
-    ```
+    
+    ```bash
     mkdir -p $HOME/.kube
     scp -i demo-devops-avenue-ue2.pem ec2-user@$MASTER_IP:/home/ec2-user/.kube/config $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config

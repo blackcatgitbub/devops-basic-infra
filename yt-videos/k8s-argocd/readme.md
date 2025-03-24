@@ -22,51 +22,57 @@ This dir contains resources covered in this video
 #### Install Docker
 
 1. Install docker, start the service and add it docker group:
-```
-sudo yum install docker -y
-sudo systemctl start docker.service
-sudo usermod -aG docker $(logname)
-```
+    ```bash
+    sudo yum install docker -y
+    sudo systemctl start docker.service
+    sudo usermod -aG docker $(logname)
+    ```
 2. Log out and login back for membership to take in effect.
-3. Test:  
-```
-docker ps
-```
+3. Test:
+
+    ```
+    docker ps
+    ```
 
 ### Create kind cluster
 Use a bash script to: 1) Install kind 2) kubectl 3) Create kind cluster and map host ports with kind container
   
-1. Download [setup_cluster](script/set_cluster.sh) script on your node.  
-```
-wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-argocd/script/set_cluster.sh
-```
-3. Change permissions for the script and run it.  
-```
-chmod +x set_cluster.sh
-./set_cluster.sh 
-```
+1. Download [setup_cluster](script/set_cluster.sh) script on your node.
+
+    ```bash
+    wget https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-argocd/script/set_cluster.sh
+    ```
+3. Change permissions for the script and run it.
+
+    ```bash
+    chmod +x set_cluster.sh
+    ./set_cluster.sh 
+    ```
 
 ### Install Argo CD
 
 1. Create a new namespace and install Argo CD
-```
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
+
+    ```bash
+    kubectl create namespace argocd
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    ```
+
 2. Forward host port to Argo CD API server (running it in background with `&`)
 
-```
-kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443 >/dev/null 2>&1 &
-```
+    ```bash
+    kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443 >/dev/null 2>&1 &
+    ```
+
 3. Access Argo CD Server on any browser
 
-```
-https://<instance_public_ip>:8080
-```
+    ```HTML
+    https://<instance_public_ip>:8080
+    ```
 4. Retrieve login password
-```
-kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode; echo
-```
+    ```bash
+    kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode; echo
+    ```
 5. Login to argo CD  
 Enter in `admin` as username and password retrieved in step 4 above.
 6. (Optional) Change password  
@@ -88,18 +94,19 @@ Namespace: `blog-app01`
 Leave everything as it is.
 4. Click `CREATE`
 5. Click `SYNC` ,leave options as it is and click `SYNCRONIZE`
-6. Access the deployed app  
-```
-https://<instance_public_ip>:30011
-```
+6. Access the deployed app
+
+    ```HTML
+    https://<instance_public_ip>:30011
+    ```
 
 ### Deploy a web app Via Argo CD application CRD - Declarative
 
 1. Application spec are [here](argocd-app/argocd_app.yaml)
 2. Deploy the application CRD with kubectl
-```
-kubectl apply -f https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-argocd/argocd-app/argocd_app.yaml
-```
+    ```
+    kubectl apply -f https://raw.githubusercontent.com/gurlal-1/devops-avenue/refs/heads/main/yt-videos/k8s-argocd/argocd-app/argocd_app.yaml
+    ```
 
 ### Additional application config
 
@@ -108,10 +115,12 @@ Additional fields for application [CRD](https://argo-cd.readthedocs.io/en/stable
 
 ### Clean
 1. Delete argocd namespace and its resources
-```
-kubectl delete namespace argocd
-```
+
+    ```bash
+    kubectl delete namespace argocd
+    ```
 2. Exit ssh connection and destroy terraform resources.(Ensure you are in [terraform](terraform) dir)
-```
-terraform destroy
-```
+
+    ```
+    terraform destroy
+    ```

@@ -44,7 +44,7 @@ kubeseal --version
     kubectl create secret generic da-secret \
     --from-literal=username=da-user \
     --from-literal=password=da-ss-password \
-    --dry-run=client -o yaml > da-secret.yaml*
+    --dry-run=client -o yaml > da-secret.yaml
     ```
     
 2. Encrypt the secret
@@ -141,7 +141,7 @@ kubeseal --version
 
 1. Create the namespace
     
-    ```json
+    ```bash
     kubectl create ns da-namespace
     ```
     
@@ -158,7 +158,7 @@ kubeseal --version
     
 3. Apply the sealed secret
     
-    ```json
+    ```bash
     kubectl apply -f da-ns-sealed-secret.yaml -n da-namespace
     ```
     
@@ -194,7 +194,7 @@ kubeseal --version
     ```
 2. Now apply the sealed secret. Sealed would get created but regular secret won’t
 
-    ```json
+    ```bash
     kubectl apply -f da-sealed-secret-metadata.yaml
     ```
 3. Review the logs for errors

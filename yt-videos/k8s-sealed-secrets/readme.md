@@ -153,7 +153,7 @@ kubeseal --version
     --from-literal=password=da-ns-password \
     --namespace=da-namespace \
     --dry-run=client -o yaml | \
-    kubeseal --format yaml > da-ns-sealed-secret.yaml
+    kubeseal --format yaml --scope namespace-wide > da-ns-sealed-secret.yaml
     ```
     
 3. Apply the sealed secret

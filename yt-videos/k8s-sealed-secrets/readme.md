@@ -253,7 +253,7 @@ kubeseal --version
 1. Remove controller
 
     ```bash
-    kubectl delete -f [https://github.com/bitnami-labs/sealed-secrets/releases/download/](https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.20.5/controller.yaml)$SEALED_SECRETS_TAG[/controller.yaml](https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.20.5/controller.yaml)
+    kubectl delete -f https://github.com/bitnami-labs/sealed-secrets/releases/download/$SEALED_SECRETS_TAG/controller.yaml
     ```
 
 2. Remove kubeseal

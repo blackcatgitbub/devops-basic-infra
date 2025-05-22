@@ -28,6 +28,13 @@ availability_zone = data.aws_availability_zones.available.names[1]
 tags = var.tags
 }
 
+resource "aws_subnet" "public-subnet-3" {
+vpc_id     = aws_vpc.demo-eks-cluster-vpc.id
+cidr_block = cidrsubnet(var.cidr_block, 8, 30) # 10.10.30.0/24
+availability_zone = data.aws_availability_zones.available.names[1]
+tags = var.tags
+}
+
 resource "aws_subnet" "private-subnet-1" {
 vpc_id     = aws_vpc.demo-eks-cluster-vpc.id
 cidr_block = cidrsubnet(var.cidr_block, 8, 110) # 10.10.110.0/24
@@ -38,6 +45,13 @@ tags = merge( var.tags, local.additional_tags)
 resource "aws_subnet" "private-subnet-2" {
 vpc_id     = aws_vpc.demo-eks-cluster-vpc.id
 cidr_block = cidrsubnet(var.cidr_block, 8, 120)
+availability_zone = data.aws_availability_zones.available.names[1]
+tags = merge( var.tags, local.additional_tags)
+}
+
+resource "aws_subnet" "private-subnet-3" {
+vpc_id     = aws_vpc.demo-eks-cluster-vpc.id
+cidr_block = cidrsubnet(var.cidr_block, 8, 130)
 availability_zone = data.aws_availability_zones.available.names[1]
 tags = merge( var.tags, local.additional_tags)
 }
@@ -92,6 +106,11 @@ subnet_id      = aws_subnet.public-subnet-2.id
 route_table_id = aws_route_table.public-rt.id
 }
 
+resource "aws_route_table_association" "public-rt-assoc-3" {
+subnet_id      = aws_subnet.public-subnet-3.id
+route_table_id = aws_route_table.public-rt.id
+}
+
 resource "aws_route_table_association" "private-rt-assoc-1" {
 subnet_id      = aws_subnet.private-subnet-1.id
 route_table_id = aws_route_table.private-rt.id
@@ -99,5 +118,9 @@ route_table_id = aws_route_table.private-rt.id
 
 resource "aws_route_table_association" "private-rt-assoc-2" {
 subnet_id      = aws_subnet.private-subnet-2.id
+route_table_id = aws_route_table.private-rt.id
+}
+resource "aws_route_table_association" "private-rt-assoc-3" {
+subnet_id      = aws_subnet.private-subnet-3.id
 route_table_id = aws_route_table.private-rt.id
 }

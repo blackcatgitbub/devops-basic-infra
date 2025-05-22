@@ -34,7 +34,8 @@ node_role_arn   = aws_iam_role.demo-eks-ng-role.arn
 node_group_name = "demo-eks-node-group"
 subnet_ids      = [
     aws_subnet.private-subnet-1.id, 
-    aws_subnet.private-subnet-2.id
+    aws_subnet.private-subnet-2.id,
+    aws_subnet.private-subnet-3.id,
     ]
 scaling_config {
     desired_size = 2

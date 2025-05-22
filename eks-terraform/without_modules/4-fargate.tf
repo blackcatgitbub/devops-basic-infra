@@ -32,7 +32,8 @@ selector {
 #these subnets must be labeled with kubernetes.io/cluster/{cluster-name} = owned
 subnet_ids             = [
     aws_subnet.private-subnet-1.id, 
-    aws_subnet.private-subnet-2.id
+    aws_subnet.private-subnet-2.id,
+    aws_subnet.private-subnet-3.id,
     ]
 
 depends_on = [ aws_iam_role_policy_attachment.fargate-execution-policy ]
